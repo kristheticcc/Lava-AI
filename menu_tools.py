@@ -1,4 +1,5 @@
 import sqlite3
+import json
 
 def search_menu(user_query):
     # Connect to the database
@@ -25,3 +26,39 @@ def search_menu(user_query):
         return results
     else:                  # If no matching items found
         return 'No matching items found.'
+
+# JSON schema for the tool function
+tool_function={
+    "name": "search_menu",
+    "description": "Use this tool to search for menu items based on user queries.",
+    "parameters": {
+        "type": "object",
+        "properties": {
+            "user_query": {
+                "type": "string",
+                "description": "The user's query about the menu items."
+            }
+        },
+        "required": ["user_query"],
+        "additionalProperties": False
+    }
+}
+
+# List of tools to be used in the chat function
+tools=[{"type": "function", "function": tool_function}]
+
+# Function to handle tool calls
+def handle_tool_calls(message):
+    responses=[]
+
+    # Process each tool call in the message
+    for tool_call in message.tool_calls:
+        if tool_call.function.name=="search_menu":
+            arguments=json.loads(tool_call.function.arguments)
+            user_query=arguments.get("user_query", "")
+            result=search_menu(user_query)
+            responses.append({
+                "role": "tool",
+                "content": result,
+                "tool_call_id": tool_call.id
+            })
