@@ -59,6 +59,7 @@ def handle_tool_calls(message):
             result=search_menu(user_query)
             responses.append({
                 "role": "tool",
-                "content": result,
+                "content": json.dumps(result),
                 "tool_call_id": tool_call.id
             })
+    return responses

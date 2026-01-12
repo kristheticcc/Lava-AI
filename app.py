@@ -29,21 +29,21 @@ If a user asks 'Are there any discounts?' respond with something like 'Sorry, we
 # Chat function to handle user queries
 def chat(message, history):
     current_system_prompt=system_prompt
-    history = [{"user": h["user"], "assistant": h["assistant"]} for h in history]
+    history = [{"role": h["role"], "content": h["content"]} for h in history]
 
     if "dessert" in message.lower():
         current_system_prompt += ("If user asks about desserts, respond with something like "
                           "'We don't have desserts, but we do have smoothies.")
 
-    messages=[{"role": "system", "content": system_prompt}]+ history + [{"role": "user", "content": message}]
+    messages=[{"role": "system", "content": current_system_prompt}]+ history + [{"role": "user", "content": message}]
     response=client.chat.completions.create(model=model, messages=messages, tools=tools)
 
     # For multiple tool calls
     while response.choices[0].finish_reason=="tool_calls":
         msg_obj=response.choices[0].message
-        responses=handle_tool_calls(msg_obj)
+        tool_responses=handle_tool_calls(msg_obj)
         messages.append(msg_obj)
-        messages.extend(responses)
+        messages.extend(tool_responses)
         response=client.chat.completions.create(model=model, messages=messages, tools=tools)
 
     return response.choices[0].message.content
@@ -54,6 +54,7 @@ view=gr.ChatInterface(
                       type="messages",
                       title="Lava AI",
                       chatbot=gr.Chatbot(
+                                type="messages",
                                 value=[{"role": "assistant", "content": "Hi, I'm Lava! 🌴 "
                                 "I'm your AI assistant for iLava Hawaiian BBQ. How can I help you today?"}]),
                       )
