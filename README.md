@@ -1,8 +1,14 @@
 # 🌴 Lava AI: Smart Hawaiian BBQ Assistant
 
-Lava AI is a context-aware **AI Agent** designed for the Lava Hawaiian BBQ restaurant (hypothetical). Unlike a standard chatbot, Lava AI is connected to a live **SQLite database**, allowing it to provide real-time pricing, descriptions, and category-based recommendations using natural language.
+Lava AI is a context-aware **AI Agent** designed for the Lava Hawaiian BBQ restaurant (hypothetical). Unlike a standard chatbot, Lava AI is connected to a **SQLite database**, allowing it to provide accurate pricing, descriptions, and category-based recommendations using natural language.
+It is now live and deployed on Hugging Face Spaces!
 
+---
 
+## 🌐 Try Lava AI Yourself!  
+**Click here to chat with Lava, your smart Hawaiian BBQ assistant: [Launch the Lava AI App](https://huggingface.co/spaces/krishMakwana-0801/Lava-AI)**
+
+---
 
 ## 🚀 Features
 

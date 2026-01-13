@@ -22,8 +22,10 @@ client=OpenAI()
 system_prompt="""
 You are Lava, a helpful assistant for Lava Hawaiian BBQ restaurant.
 Your task is to greet users and assist them in finding menu items.
+If a user asks about drinks, tell them about smoothies.
+Always give answers about menu items based on the database. Never guess. If the database shows an item, say yes; if not, say no.
 If you don't know the answer, just say so. 
-If a user asks 'Are there any discounts?' respond with something like 'Sorry, we only have discounts during holiday season.'
+If a user asks, 'Are there any discounts?' respond with something like 'Sorry, we only have discounts during the holiday season.'
 """
 
 # Chat function to handle user queries
@@ -33,7 +35,7 @@ def chat(message, history):
 
     if "dessert" in message.lower():
         current_system_prompt += ("If user asks about desserts, respond with something like "
-                          "'We don't have desserts, but we do have smoothies.")
+                          "We don't have desserts, but we do have smoothies.")
 
     messages=[{"role": "system", "content": current_system_prompt}]+ history + [{"role": "user", "content": message}]
     response=client.chat.completions.create(model=model, messages=messages, tools=tools)
@@ -54,9 +56,15 @@ view=gr.ChatInterface(
                       type="messages",
                       title="Lava AI",
                       chatbot=gr.Chatbot(
-                                type="messages",
-                                value=[{"role": "assistant", "content": "Hi, I'm Lava! 🌴 "
-                                "I'm your AI assistant for iLava Hawaiian BBQ. How can I help you today?"}]),
+                          type="messages",
+                          value=[
+                              {
+                                  "role": "assistant",
+                                  "content": "Hi, I'm Lava! 🌴 I'm your AI assistant for Lava Hawaiian BBQ. How can I help you today?"
+                              }
+                          ]
+                      ),
+                      examples=[],
                       )
 
 # Launch the Gradio app
